@@ -37,7 +37,7 @@ def merge(dfs, size, header=None, shuffle=False):
 
 
 if __name__ == '__main__':
-    args = docopt(__doc__, version='Combine csv')
+    args = docopt(__doc__)
 
     size = int(args['<size>'])
     if size <= 0:

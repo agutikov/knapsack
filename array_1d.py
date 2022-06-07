@@ -1,19 +1,17 @@
 #!/usr/bin/env python3
-
 """Generate array of integer numbers
 
 Usage:
-  array_1d.py <size> (const | linear | square) [-o <output_file>]
-  array_1d.py <size> uniform [--min=<min>] [--max=<max>] [-p=<precision>] [-o <output_file>]
-  array_1d.py <size> normal <mean> <std> [--min=<min>] [--max=<max>] [-p=<precision>] [-o <output_file>]
+  array_1d.py <size> (const | linear | square) [-o FILE]
+  array_1d.py <size> uniform [--min=<min>] [--max=<max>] [-o FILE]
+  array_1d.py <size> normal <mean> <std> [--min=<min>] [--max=<max>] [-o FILE]
   array_1d.py (-h | --help)
 
 Options:
   -h --help            Show help.
-  -o <output_file>     Output csv file.
+  -o FILE              Output csv file.
   --min=<min>          Min value, [default: 1].
   --max=<max>          Max value, [default: 1000].
-
 """
 from docopt import docopt
 import numpy as np
@@ -37,7 +35,7 @@ def normal(size, mean, std, min, max):
 
 
 if __name__ == '__main__':
-    args = docopt(__doc__, version='Array generator')
+    args = docopt(__doc__)
 
     size = int(args['<size>'])
     if size <= 0:
@@ -64,9 +62,9 @@ if __name__ == '__main__':
 
     d = [int(x) for x in data]
 
-    output = sys.stdout
-    if args['-o'] is not None:
-        output = args['-o']
+    output = args['-o']
+    if output is None:
+        output = stdout
 
     np.savetxt(output, d, delimiter=',')
 

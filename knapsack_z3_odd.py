@@ -3,8 +3,7 @@
 import pandas as pd
 import sys
 from io import StringIO
-from ortools.sat.python import cp_model
-
+from z3 import *
 
 
 def knapsack_01(df, capacity):
@@ -13,25 +12,33 @@ def knapsack_01(df, capacity):
     w = [int(x) for x in df['weight']]
     c = int(capacity)
 
-    model = cp_model.CpModel()
+    x = [Int(f'x_{i}') for i in I]
 
-    x = [model.NewIntVar(0, 1, f'x_{i}') for i in I]
+    s = Optimize()
 
-    model.Add(sum(x[i] * w[i] for i in I) <= c)
+    for x_i in x:
+        s.add(Or(x_i == 0, x_i == 1))
+        # s.add(x_i >= 0)
+        # s.add(x_i <= 1)
 
-    model.Maximize(sum(x[i] * p[i] for i in I))
+    s.add(Sum([x[i] * w[i] for i in I]) <= c)
 
-    solver = cp_model.CpSolver()
-    status = solver.Solve(model)
+    s.add(Sum(x) % 2 == 1)
 
-    if status != cp_model.OPTIMAL:
-        print('Non-optimal solution')
+    s.maximize(Sum([x[i] * p[i] for i in I]))
+
+    r = s.check()
+
+    if r != sat:
+        print('Unsat')
         return None
+
+    m = s.model()
 
     result = pd.DataFrame()
     result['weight'] = w
     result['profit'] = p
-    result['take'] = [int(solver.Value(x[i])) for i in I]
+    result['take'] = [m.eval(x[i]).as_long() for i in I]
 
     return result
 

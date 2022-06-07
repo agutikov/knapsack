@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-from mip import Model, xsum, maximize, BINARY, CBC, ConstrsGenerator, CutPool, OptimizationStatus
 import pandas as pd
 import sys
 from io import StringIO
+from mip import Model, xsum, maximize, BINARY
 
 
 

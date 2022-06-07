@@ -2,3 +2,5 @@ numpy
 pandas
 mip
 ortools
+# cvc4-solver
+z3-solver

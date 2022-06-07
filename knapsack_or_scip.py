@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-from ortools.linear_solver import pywraplp
 import pandas as pd
 import sys
 from io import StringIO
+from ortools.linear_solver import pywraplp
 
 
 

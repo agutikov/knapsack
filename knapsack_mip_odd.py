@@ -3,7 +3,7 @@
 import pandas as pd
 import sys
 from io import StringIO
-from ortools.sat.python import cp_model
+from mip import Model, xsum, maximize, BINARY, CBC, ConstrsGenerator, CutPool, OptimizationStatus
 
 
 
@@ -11,27 +11,21 @@ def knapsack_01(df, capacity):
     I = range(len(df))
     p = [int(x) for x in df['profit']]
     w = [int(x) for x in df['weight']]
-    c = int(capacity)
 
-    model = cp_model.CpModel()
+    m = Model("knapsack")
 
-    x = [model.NewIntVar(0, 1, f'x_{i}') for i in I]
+    x = [m.add_var(var_type=BINARY) for i in I]
 
-    model.Add(sum(x[i] * w[i] for i in I) <= c)
+    m.objective = maximize(xsum(p[i] * x[i] for i in I))
 
-    model.Maximize(sum(x[i] * p[i] for i in I))
+    m += xsum(w[i] * x[i] for i in I) <= capacity
 
-    solver = cp_model.CpSolver()
-    status = solver.Solve(model)
-
-    if status != cp_model.OPTIMAL:
-        print('Non-optimal solution')
-        return None
+    m.optimize()
 
     result = pd.DataFrame()
     result['weight'] = w
     result['profit'] = p
-    result['take'] = [int(solver.Value(x[i])) for i in I]
+    result['take'] = [1 if x[i].x > 0.99 else 0 for i in I]
 
     return result
 

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-from ortools.sat.python import cp_model
 import pandas as pd
 import sys
 from io import StringIO
+from ortools.sat.python import cp_model
 
 
 
