@@ -14,6 +14,9 @@
 #include "knapsack_csv.h"
 
 
+using item_t = item<double>;
+
+
 bool density_gt(const item_t& left, const item_t& right)
 {
     double d1 = left.profit / left.weight;
@@ -76,12 +79,12 @@ struct knapsack_result_t
 };
 
 
-struct knapsack_01
+struct knapsack_01_bnb
 {
     std::vector<item_t> items;
     double capacity;
 
-    knapsack_01(const std::vector<item_t>& _items, double c) :
+    knapsack_01_bnb(const std::vector<item_t>& _items, double c) :
         items(_items), capacity(c),
         max_p(items.size()), min_w(items.size()),
         state(items), state_max(items), level_stats(items.size())
@@ -316,10 +319,10 @@ struct knapsack_01
 
 int main(int argc, const char* argv[])
 {
-    auto items = read_csv(argv[1]);
+    auto items = read_csv<double>(argv[1]);
     double capacity = std::stod(argv[2]);
 
-    knapsack_01 k{ items, capacity };
+    knapsack_01_bnb k{ items, capacity };
 
     if (false) {
         k.result_constraint = [](const knapsack_result_t& state) { return state.count % 2 != 0; };
@@ -331,7 +334,7 @@ int main(int argc, const char* argv[])
     std::cout << std::endl;
 
     auto r = k.result();
-    save_csv(argv[3], r);
+    save_csv(argv[3], r, 1);
 
 
     return 0;

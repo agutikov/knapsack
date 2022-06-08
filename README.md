@@ -23,8 +23,8 @@ pip3 install -r ./requirements.txt
 * Basic algorithms:
   * Branch and Bound:
     * Algorithm: https://www.geeksforgeeks.org/0-1-knapsack-using-branch-and-bound/
-    * C++ Implementation: https://www.geeksforgeeks.org/implementation-of-0-1-knapsack-using-branch-and-bound/
-  * DP:
+    * Implementation: https://www.geeksforgeeks.org/implementation-of-0-1-knapsack-using-branch-and-bound/
+  * DP: https://www.geeksforgeeks.org/0-1-knapsack-problem-dp-10/
 * High-level tools: wrappers, frameworks, etc...
   * Python-MIP: https://docs.python-mip.com/en/latest/examples.html
   * OR-Tools: https://developers.google.com/optimization/introduction/overview
@@ -44,6 +44,6 @@ pip3 install -r ./requirements.txt
 * CP - [Constraint Programming](https://en.wikipedia.org/wiki/Constraint_programming)
 * DP - [Dynamic Programming](https://en.wikipedia.org/wiki/Dynamic_programming)
 * MIP - [Mixed Integer Programming](https://en.wikipedia.org/wiki/Integer_programming)
-* SAT - **SAT**isfiability [Boolean satisfiability problem](https://en.wikipedia.org/wiki/Boolean_satisfiability_problem), [SAT solver](https://en.wikipedia.org/wiki/SAT_solver)
+* SAT - **SAT**isfiability: [Boolean satisfiability problem](https://en.wikipedia.org/wiki/Boolean_satisfiability_problem), [SAT solver](https://en.wikipedia.org/wiki/SAT_solver)
 * SMT - [Satisfiability Modulo Theories](https://en.wikipedia.org/wiki/Satisfiability_modulo_theories)
 

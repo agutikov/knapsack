@@ -10,17 +10,18 @@
 #include <iostream>
 
 
-struct item_t
+template<typename T>
+struct item
 {
     size_t id;
-    double weight;
-    double profit;
+    T weight;
+    T profit;
 };
 
-
-std::vector<item_t> read_csv(const std::string& filename)
+template<typename T>
+std::vector<item<T>> read_csv(const std::string& filename)
 {
-    std::vector<item_t> items;
+    std::vector<item<T>> items;
 
     std::ifstream ifs(filename);
 
@@ -40,14 +41,14 @@ std::vector<item_t> read_csv(const std::string& filename)
             }
         }
         std::stringstream ss(line);
-        double w, p;
+        T w, p;
         ss >> w;
         while (ss.peek() == ',' || ss.peek() == ' ') {
             ss.ignore();
         }
         ss >> p;
 
-        items.emplace_back(item_t{id, w, p});
+        items.emplace_back(item<T>{id, w, p});
         id++;
     }
 
@@ -55,10 +56,11 @@ std::vector<item_t> read_csv(const std::string& filename)
 }
 
 
-void save_csv(const char* filename, const std::vector<std::pair<item_t, bool>>& r)
+template<typename T>
+void save_csv(const char* filename, const std::vector<std::pair<item<T>, bool>>& r, int precision)
 {
     auto data = r;
-    std::sort(data.begin(), data.end(), [](const std::pair<item_t, bool>& p1, const std::pair<item_t, bool>& p2) {
+    std::sort(data.begin(), data.end(), [](const std::pair<item<T>, bool>& p1, const std::pair<item<T>, bool>& p2) {
         return p1.first.id < p2.first.id;
     });
 
@@ -72,8 +74,8 @@ void save_csv(const char* filename, const std::vector<std::pair<item_t, bool>>& 
     *os << "weight,profit,take" << std::endl;
 
     for (const auto& p : data) {
-        *os << std::fixed << std::setprecision(1) << p.first.weight << ","
-            << std::fixed << std::setprecision(1) << p.first.profit << ","
+        *os << std::fixed << std::setprecision(precision) << p.first.weight << ","
+            << std::fixed << std::setprecision(precision) << p.first.profit << ","
             << p.second << std::endl;
     }
 
