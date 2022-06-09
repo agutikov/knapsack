@@ -29,7 +29,7 @@ struct knapsack_01_dp
     knapsack_01_dp(const std::vector<item_t>& _items, size_t c) :
         items(_items), capacity(c)
     {
-        table.resize(items.size() + 1);
+        table.resize(2);
 
         for (auto& row : table) {
             row.resize(capacity + 1);
@@ -42,38 +42,37 @@ struct knapsack_01_dp
 
     // TODO: weight > capacity
     // TODO: capacity >= sum(weights)
-    // TODO: 2 rows
+
     // TODO: bit vector for bool vector
     // TODO: sort??
 
     void optimize()
     {
-        for (size_t i = 1; i <= items.size(); i++) {
-            const item_t& item = items[i-1];
+        for (size_t item_i = 0; item_i < items.size(); item_i++) {
+            const item_t& item = items[item_i];
+            size_t i = item_i + 1;
+            size_t i_1 = i % 2;
+            size_t i_0 = (i - 1) % 2;
 
-            for (size_t c = 0; c <= capacity; c++) {
+            for (size_t c = 1; c <= capacity; c++) {
                 if (item.weight > c) {
-                    table[i][c] = table[i - 1][c];
+                    table[i_1][c] = table[i_0][c];
                 } else {
-                    size_t p1 = table[i - 1][c].first;
-                    size_t p2 = table[i - 1][c - item.weight].first + item.profit;
+                    size_t p1 = table[i_0][c].first;
+                    size_t p2 = table[i_0][c - item.weight].first + item.profit;
 
-                    if (p1 > p2) {
-                        table[i][c] = table[i - 1][c];
+                    if (p1 >= p2) {
+                        table[i_1][c] = table[i_0][c];
                     } else {
-                        table[i][c].first = p2;
-                        table[i][c].second = table[i - 1][c - item.weight].second;
-                        table[i][c].second[i] = true;
+                        table[i_1][c].first = p2;
+                        table[i_1][c].second = table[i_0][c - item.weight].second;
+                        table[i_1][c].second[item_i] = true;
                     }
                 }
-            }
-        }
 
-        for (const auto& row : table) {
-            for (const auto& item : row) {
-                printf(" %4lu", item.first);
+                //printf(" %lu", table[i_1][c].first);
             }
-            printf("\n");
+            //printf("\n");
         }
     }
 
@@ -81,7 +80,7 @@ struct knapsack_01_dp
     {
         std::vector<std::pair<item_t, bool>> r;
 
-        const auto &selected = table[items.size()][capacity].second;
+        const auto &selected = table[items.size() % 2][capacity].second;
 
         for (size_t i = 0; i < items.size(); i++) {
             r.emplace_back(items[i], selected[i]);

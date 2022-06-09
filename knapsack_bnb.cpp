@@ -334,7 +334,7 @@ int main(int argc, const char* argv[])
     std::cout << std::endl;
 
     auto r = k.result();
-    save_csv(argv[3], r, 1);
+    save_csv(argv[3], r, 0);
 
 
     return 0;

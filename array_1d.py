@@ -50,14 +50,14 @@ if __name__ == '__main__':
     elif args['square']:
         data = square(size)
     elif args['uniform']:
-        min = float(args['--min'])
-        max = float(args['--max'])
+        min = int(args['--min'])
+        max = int(args['--max'])
         data = uniform(size, min, max)
     elif args['normal']:
-        mean = float(args['<mean>'])
-        std = float(args['<std>'])
-        min = float(args['--min'])
-        max = float(args['--max'])
+        mean = int(args['<mean>'])
+        std = int(args['<std>'])
+        min = int(args['--min'])
+        max = int(args['--max'])
         data = normal(size, mean, std, min, max)
 
     d = [int(x) for x in data]
@@ -66,7 +66,7 @@ if __name__ == '__main__':
     if output is None:
         output = stdout
 
-    np.savetxt(output, d, delimiter=',')
+    np.savetxt(output, d, delimiter=',', fmt='%d')
 
 
 
